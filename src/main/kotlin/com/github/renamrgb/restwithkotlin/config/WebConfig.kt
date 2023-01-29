@@ -1,16 +1,21 @@
 package com.github.renamrgb.restwithkotlin.config
 
 import com.github.renamrgb.restwithkotlin.serialization.converter.YamlJackson2HttpMessageConverter
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer
+import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 class WebConfig : WebMvcConfigurer{
 
     private val MEDIA_TYPE_APPLICATION_YAML = MediaType.valueOf("application/x-yaml")
+
+    @Value("\${cors.originPatters:default}")
+    private val corsOriginPatterns: String = ""
     override fun configureContentNegotiation(configurer: ContentNegotiationConfigurer) {
 //        configurer.favorParameter(true).parameterName("mediaType")
 //            .ignoreAcceptHeader(true)
@@ -30,5 +35,13 @@ class WebConfig : WebMvcConfigurer{
 
     override fun extendMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
         converters.add(YamlJackson2HttpMessageConverter())
+    }
+
+    override fun addCorsMappings(registry: CorsRegistry) {
+        val allowedOrigins = corsOriginPatterns.split(",").toTypedArray()
+        registry.addMapping("/**")
+            .allowedMethods("*")
+            .allowedOrigins(*allowedOrigins)
+            .allowCredentials(true)
     }
 }

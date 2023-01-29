@@ -1,3 +1,4 @@
+package com.github.renamrgb.restwithkotlin.services
 
 import com.github.renamrgb.restwithkotlin.controller.BookController
 import com.github.renamrgb.restwithkotlin.data.vo.v1.BookVO
@@ -6,16 +7,12 @@ import com.github.renamrgb.restwithkotlin.exceptions.ResourceNotFoundException
 import com.github.renamrgb.restwithkotlin.mapper.DozerMapper
 import com.github.renamrgb.restwithkotlin.model.Book
 import com.github.renamrgb.restwithkotlin.repository.BookRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
 
 @Service
-class BookService {
-
-    @Autowired
-    private lateinit var repository: BookRepository
+class BookService(val repository: BookRepository) {
 
     private val logger = Logger.getLogger(BookService::class.java.name)
 
@@ -32,7 +29,7 @@ class BookService {
 
     fun findById(id: Long): BookVO {
         logger.info("Finding one book with ID $id!")
-        var book = repository.findById(id)
+        val book = repository.findById(id)
             .orElseThrow { ResourceNotFoundException("No records found for this ID!") }
         val bookVO: BookVO = DozerMapper.parseObject(book, BookVO::class.java)
         val withSelfRel = linkTo(BookController::class.java).slash(bookVO.key).withSelfRel()
@@ -43,7 +40,7 @@ class BookService {
     fun create(book: BookVO?) : BookVO{
         if (book == null) throw RequiredObjectIsNullException()
         logger.info("Creating one book with title ${book.title}!")
-        var entity: Book = DozerMapper.parseObject(book, Book::class.java)
+        val entity: Book = DozerMapper.parseObject(book, Book::class.java)
         val bookVO: BookVO = DozerMapper.parseObject(repository.save(entity), BookVO::class.java)
         val withSelfRel = linkTo(BookController::class.java).slash(bookVO.key).withSelfRel()
         bookVO.add(withSelfRel)

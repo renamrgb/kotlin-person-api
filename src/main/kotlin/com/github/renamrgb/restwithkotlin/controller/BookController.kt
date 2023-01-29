@@ -1,8 +1,7 @@
 package com.github.renamrgb.restwithkotlin.controller
 
-
-import BookService
 import com.github.renamrgb.restwithkotlin.data.vo.v1.BookVO
+import com.github.renamrgb.restwithkotlin.services.BookService
 import com.github.renamrgb.restwithkotlin.util.constants.MediaType
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -10,17 +9,14 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/book/v1")
 @Tag(name = "Books", description = "Endpoints for Managing Books")
-class BookController {
+class BookController(val service: BookService) {
 
-    @Autowired
-    private lateinit var service: BookService
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YAML])
     @Operation(summary = "Finds all Books", description = "Finds all Books",
