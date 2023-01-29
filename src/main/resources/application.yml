@@ -15,3 +15,8 @@ spring-doc:
     use-root-path: true
 cors:
   originPatters: "http://localhost:8080"
+security:
+  jwt:
+    token:
+      secret-key: 53cr37
+      expire-length: 3600000
