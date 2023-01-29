@@ -8,3 +8,8 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: none
+spring-doc:
+  paths-to-match:
+    - /**
+  swagger-ui:
+    use-root-path: true
