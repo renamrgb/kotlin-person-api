@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    container_name: postgres-kotlin
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - .script:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"

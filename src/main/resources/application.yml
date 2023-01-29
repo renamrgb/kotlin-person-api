@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/kotlin?useTimeZone=true&serverTimeZone=UTC&useLegacyDate
+    username: docker
+    password: docker
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
