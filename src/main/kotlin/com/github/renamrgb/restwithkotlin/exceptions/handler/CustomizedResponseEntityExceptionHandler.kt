@@ -1,6 +1,7 @@
 package com.github.renamrgb.restwithkotlin.exceptions.handler
 
 import com.github.renamrgb.restwithkotlin.exceptions.ExceptionResponse
+import com.github.renamrgb.restwithkotlin.exceptions.InvalidJwtAuthenticationException
 import com.github.renamrgb.restwithkotlin.exceptions.RequiredObjectIsNullException
 import com.github.renamrgb.restwithkotlin.exceptions.ResourceNotFoundException
 import org.springframework.http.HttpStatus
@@ -48,5 +49,17 @@ class CustomizedResponseEntityExceptionHandler : ResponseEntityExceptionHandler(
         )
 
         return ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(InvalidJwtAuthenticationException::class)
+    fun invalidJwtAuthenticationException(ex: InvalidJwtAuthenticationException, request: WebRequest):
+            ResponseEntity<ExceptionResponse> {
+        val exceptionResponse = ExceptionResponse(
+            timeStamp = Date(),
+            message = ex.message,
+            details = request.getDescription(false)
+        )
+
+        return ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.FORBIDDEN)
     }
 }
